@@ -16,6 +16,8 @@ firebaseBom =  "33.9.0"
 google-gson ="2.12.1"
 coil-version = "3.1.0"
 android-play-services = "21.3.0"
+runtime = "1.11.0"
+ui = "1.11.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -49,6 +51,8 @@ firebase-bom = {group = "com.google.firebase", name="firebase-bom", version.ref=
 google-gson = {group = "com.google.code.gson", name ="gson", version.ref="google-gson"}
 coil-compose = {group = "io.coil-kt.coil3", name = "coil-compose", version.ref="coil-version"}
 coil-network = {group = "io.coil-kt.coil3", name = "coil-network-okhttp", version.ref="coil-version"}
+androidx-compose-runtime = { group = "androidx.compose.runtime", name = "runtime", version.ref = "runtime" }
+androidx-compose-ui = { group = "androidx.compose.ui", name = "ui", version.ref = "ui" }
 
 
 [plugins]
