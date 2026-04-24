@@ -11,6 +11,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.blogapp.presentation.components.DefaultButton
 import com.example.blogapp.presentation.components.DefaultTopBar
+import com.example.blogapp.presentation.screens.new_post.components.NewPost
 import com.example.blogapp.presentation.screens.new_post.components.NewPostContent
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -32,8 +33,10 @@ fun NewPostScreen(navController: NavHostController, viewModel: NewPostViewModel 
                 modifier = Modifier.fillMaxWidth().padding(bottom = 50.dp),
                 text = "PUBLICAR",
                 onClick = {
+                    viewModel.onNewPost()
                 }
             )
         }
     )
+    NewPost()
 }

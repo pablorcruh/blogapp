@@ -1,6 +1,6 @@
 package com.example.blogapp.data.repository
 
-import coil3.Uri
+import com.example.blogapp.core.Constants.USERS
 import com.example.blogapp.domain.model.Response
 import com.example.blogapp.domain.model.User
 import com.example.blogapp.domain.repository.UsersRepository
@@ -13,10 +13,11 @@ import kotlinx.coroutines.tasks.await
 import java.io.File
 import java.util.HashMap
 import javax.inject.Inject
+import javax.inject.Named
 
 class UserRepositoryImpl @Inject constructor(
-    private val usersRef: CollectionReference,
-    private val storageUserRef: StorageReference
+    @Named(USERS)private val usersRef: CollectionReference,
+    @Named(USERS)private val storageUserRef: StorageReference
 ): UsersRepository {
 
 

@@ -7,6 +7,10 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.blogapp.R
+import com.example.blogapp.domain.model.Post
+import com.example.blogapp.domain.model.Response
+import com.example.blogapp.domain.usecases.auth.AuthUseCases
+import com.example.blogapp.domain.usecases.posts.PostsUseCase
 import com.example.blogapp.presentation.utils.ComposeFileProvider
 import com.example.blogapp.presentation.utils.ResultingActivityHandler
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -17,15 +21,21 @@ import javax.inject.Inject
 
 @HiltViewModel
 class NewPostViewModel @Inject constructor(
+    private val postUseCase: PostsUseCase,
+    private val authUseCase: AuthUseCases,
     @ApplicationContext private val context: Context
 ) : ViewModel() {
 
     var state by mutableStateOf(NewPostState())
         private set
 
+    var createPostResponse by mutableStateOf<Response<Boolean>?>(null)
+
     var file: File? = null
 
     val resultingActivityHandler = ResultingActivityHandler()
+
+    val user = authUseCase.getCurrentUser()
 
     fun pickImage() = viewModelScope.launch {
         val result = resultingActivityHandler.getContent("image/*")
@@ -49,6 +59,32 @@ class NewPostViewModel @Inject constructor(
         CategoryRadioButton("XBOX", R.drawable.icon_xbox),
         CategoryRadioButton("NINTENDO", R.drawable.icon_nintendo)
     )
+
+    fun createPost(post: Post) = viewModelScope.launch {
+        createPostResponse = Response.Loading
+        val result = postUseCase.createPost(post, file!!)
+        createPostResponse = result
+    }
+
+    fun onNewPost(){
+        val post = Post(
+            name = state.name,
+            description = state.description,
+            category = state.category,
+            idUser = user?.uid ?: ""
+        )
+        createPost(post)
+    }
+
+
+    fun clearForm(){
+        state = state.copy(
+            name = "",
+            category = "",
+            description = "",
+            image = ""
+        )
+    }
 
     fun onNameInput(name: String){
         state = state.copy(name = name)
