@@ -7,6 +7,9 @@ import com.example.blogapp.domain.model.Response
 import com.example.blogapp.domain.repository.PostRepository
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.storage.StorageReference
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.tasks.await
 import java.io.File
 import javax.inject.Inject
@@ -16,6 +19,21 @@ class PostRepositoryImpl @Inject constructor(
     @Named(POSTS) private val postRef: CollectionReference,
     @Named(POSTS) private val storagePostRef: StorageReference
 ): PostRepository {
+    override fun getPosts(): Flow<Response<List<Post>>> = callbackFlow{
+        val snapshotListener = postRef.addSnapshotListener { snapshots, exception ->
+            val postResponse = if(snapshots !=null){
+                val posts = snapshots.toObjects(Post::class.java)
+                Response.Success(posts)
+            }else{
+                Response.Failure(exception)
+            }
+            trySend(postResponse)
+        }
+        awaitClose{
+            snapshotListener.remove()
+        }
+    }
+
     override suspend fun create(
         post: Post,
         file: File
