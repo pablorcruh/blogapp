@@ -15,16 +15,18 @@ fun PostsContent(
     posts: List<Post>
 ){
     LazyColumn(
-        modifier = Modifier.fillMaxWidth()
-    ) {
-        items(posts.size) {item ->
-            Text(
-                text  = "Item #$item",
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp)
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(
+                start = 20.dp,
+                end = 20.dp,
+                top = 20.dp,
+                bottom = 100.dp
             )
 
+    ) {
+        items(posts.size) {
+            PostCard(post= posts[it])
         }
     }
 }
