@@ -4,30 +4,57 @@ import android.net.Uri
 import com.example.blogapp.core.Constants.POSTS
 import com.example.blogapp.domain.model.Post
 import com.example.blogapp.domain.model.Response
+import com.example.blogapp.domain.model.User
 import com.example.blogapp.domain.repository.PostRepository
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.storage.StorageReference
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.async
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
+import okhttp3.Dispatcher
 import java.io.File
 import javax.inject.Inject
 import javax.inject.Named
 
 class PostRepositoryImpl @Inject constructor(
+    @Named("USERS")private val usersRef: CollectionReference,
     @Named(POSTS) private val postRef: CollectionReference,
     @Named(POSTS) private val storagePostRef: StorageReference
 ): PostRepository {
     override fun getPosts(): Flow<Response<List<Post>>> = callbackFlow{
         val snapshotListener = postRef.addSnapshotListener { snapshots, exception ->
-            val postResponse = if(snapshots !=null){
-                val posts = snapshots.toObjects(Post::class.java)
-                Response.Success(posts)
-            }else{
-                Response.Failure(exception)
+            GlobalScope.launch(Dispatchers.IO) {
+                val postResponse = if(snapshots !=null){
+                    val posts = snapshots.toObjects(Post::class.java)
+                    val idUserArray = ArrayList<String>()
+                    posts.forEach { post ->
+                        idUserArray.add(post.idUser)
+                    }
+                    val idUserList = idUserArray.toSet().toList()
+
+                    idUserList.map{idUser ->
+                        async{
+                            val user = usersRef.document(idUser).get().await().toObject(User::class.java)!!
+                            posts.forEach { post ->
+                                if(post.idUser == idUser){
+                                    post.user = user
+                                }
+                            }
+                        }
+                    }.forEach {
+                        it.await()
+                    }
+                    Response.Success(posts)
+                }else{
+                    Response.Failure(exception)
+                }
+                trySend(postResponse)
             }
-            trySend(postResponse)
         }
         awaitClose{
             snapshotListener.remove()
