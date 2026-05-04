@@ -2,6 +2,7 @@ package com.example.blogapp.data.repository
 
 import android.net.Uri
 import com.example.blogapp.core.Constants.POSTS
+import com.example.blogapp.core.Constants.USERS
 import com.example.blogapp.domain.model.Post
 import com.example.blogapp.domain.model.Response
 import com.example.blogapp.domain.model.User
@@ -22,7 +23,7 @@ import javax.inject.Inject
 import javax.inject.Named
 
 class PostRepositoryImpl @Inject constructor(
-    @Named("USERS")private val usersRef: CollectionReference,
+    @Named(USERS)private val usersRef: CollectionReference,
     @Named(POSTS) private val postRef: CollectionReference,
     @Named(POSTS) private val storagePostRef: StorageReference
 ): PostRepository {
