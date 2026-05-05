@@ -11,7 +11,7 @@ import com.example.blogapp.presentation.screens.detail_post.components.DetailPos
 fun DetailPostScreen(navController: NavHostController){
     Scaffold(
         topBar = {},
-        content = { DetailPostContent() },
+        content = { DetailPostContent(navController) },
         bottomBar = {}
     )
 }
