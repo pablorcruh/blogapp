@@ -6,6 +6,7 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import androidx.navigation.navigation
+import com.example.blogapp.presentation.screens.detail_post.DetailPostScreen
 import com.example.blogapp.presentation.screens.new_post.NewPostScreen
 import com.example.blogapp.presentation.screens.profile_edit.ProfileEditSreen
 
@@ -29,6 +30,17 @@ fun NavGraphBuilder.detailsNavGraph(navController: NavHostController){
                 ProfileEditSreen(navController)
             }
         }
+
+        composable(
+            route = DetailsScreen.PostDetail.route,
+            arguments = listOf(navArgument("post"){
+                type = NavType.StringType
+            })
+        ){
+            it.arguments?.getString("post")?.let {
+                DetailPostScreen(navController)
+            }
+        }
     }
 }
 
@@ -38,6 +50,10 @@ sealed class DetailsScreen(val route: String){
 
     object ProfileEdit: DetailsScreen("profile/edit/{user}"){
         fun passUser(user: String) = "profile/edit/${user}"
+    }
+
+    object PostDetail: DetailsScreen("posts/detail/{post}"){
+        fun passPost(post: String) = "posts/detail/${post}"
     }
 
 }

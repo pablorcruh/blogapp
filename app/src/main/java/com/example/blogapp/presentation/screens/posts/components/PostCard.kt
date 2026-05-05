@@ -1,6 +1,7 @@
 package com.example.blogapp.presentation.screens.posts.components
 
 import android.R
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -16,13 +17,19 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import coil3.compose.AsyncImage
 import com.example.blogapp.domain.model.Post
+import com.example.blogapp.presentation.navigation.DetailsScreen
 
 @Composable
-fun PostCard(post: Post){
+fun PostCard(post: Post, navController: NavHostController){
     Card(
-        modifier = Modifier.padding(top = 15.dp),
+        modifier = Modifier
+            .padding(top = 15.dp)
+            .clickable{
+                navController.navigate(route = DetailsScreen.PostDetail.passPost(post.toJson()))
+            },
         elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
         shape = RoundedCornerShape(20.dp)
     ) {
