@@ -8,6 +8,7 @@ import com.example.blogapp.domain.model.Response
 import com.example.blogapp.domain.model.User
 import com.example.blogapp.domain.repository.PostRepository
 import com.google.firebase.firestore.CollectionReference
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.storage.StorageReference
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -31,6 +32,9 @@ class PostRepositoryImpl @Inject constructor(
             GlobalScope.launch(Dispatchers.IO) {
                 val postResponse = if(snapshots !=null){
                     val posts = snapshots.toObjects(Post::class.java)
+                    snapshots.documents.forEachIndexed { index, document ->
+                        posts[index].id = document.id
+                    }
                     val idUserArray = ArrayList<String>()
                     posts.forEach { post ->
                         idUserArray.add(post.idUser)
@@ -124,6 +128,32 @@ class PostRepositoryImpl @Inject constructor(
             postRef.document(post.id).update(map).await()
             Response.Success(true)
         }catch(e: Exception){
+            e.printStackTrace()
+            Response.Failure(e)
+        }
+    }
+
+    override suspend fun likes(
+        idPost: String,
+        idUser: String
+    ): Response<Boolean> {
+        return try{
+            postRef.document(idPost).update("likes", FieldValue.arrayUnion(idUser)).await()
+            Response.Success(true)
+        }catch(e: Exception){
+            e.printStackTrace()
+            Response.Failure(e)
+        }
+    }
+
+    override suspend fun deleteLikes(
+        idPost: String,
+        idUser: String
+    ): Response<Boolean> {
+        return try{
+            postRef.document(idPost).update("likes", FieldValue.arrayRemove(idUser)).await()
+            Response.Success(true)
+        }catch(e:Exception){
             e.printStackTrace()
             Response.Failure(e)
         }

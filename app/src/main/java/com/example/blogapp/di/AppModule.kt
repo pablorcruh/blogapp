@@ -14,9 +14,11 @@ import com.example.blogapp.domain.usecases.auth.LoginUseCase
 import com.example.blogapp.domain.usecases.auth.LogoutUseCase
 import com.example.blogapp.domain.usecases.auth.SignupUseCase
 import com.example.blogapp.domain.usecases.posts.CreatePostUseCase
+import com.example.blogapp.domain.usecases.posts.DeleteLikeUseCase
 import com.example.blogapp.domain.usecases.posts.DeletePostUseCase
 import com.example.blogapp.domain.usecases.posts.GetPostsByUserIdUseCase
 import com.example.blogapp.domain.usecases.posts.GetPostsUseCase
+import com.example.blogapp.domain.usecases.posts.LikePostUseCase
 import com.example.blogapp.domain.usecases.posts.PostsUseCase
 import com.example.blogapp.domain.usecases.posts.UpdatePostUseCase
 import com.example.blogapp.domain.usecases.users.CreateUserUseCase
@@ -98,7 +100,9 @@ object AppModule {
         getPosts = GetPostsUseCase(repository),
         getPostByUserId = GetPostsByUserIdUseCase(repository),
         deletePostUseCase = DeletePostUseCase(repository),
-        updatePostUseCase = UpdatePostUseCase(repository)
+        updatePostUseCase = UpdatePostUseCase(repository),
+        likePostUseCase = LikePostUseCase(repository),
+        deleteLikePostUseCase = DeleteLikeUseCase(repository)
     )
 
 }

@@ -6,7 +6,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import com.example.blogapp.presentation.screens.posts.components.DeleteLikePost
 import com.example.blogapp.presentation.screens.posts.components.GetPosts
+import com.example.blogapp.presentation.screens.posts.components.LikePost
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
@@ -18,4 +20,6 @@ fun PostsScreen(navController: NavHostController, viewModel: PostsViewModel = hi
         },
         bottomBar = {}
      )
+    LikePost()
+    DeleteLikePost()
 }
