@@ -10,16 +10,18 @@ import com.example.blogapp.domain.model.Response
 import com.example.blogapp.domain.model.Response.Loading
 import com.example.blogapp.domain.usecases.auth.AuthUseCases
 import com.example.blogapp.domain.usecases.posts.GetPostsByUserIdUseCase
+import com.example.blogapp.domain.usecases.posts.PostsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class MyPostsViewModel @Inject constructor(
-    private val getPostsByIdUser: GetPostsByUserIdUseCase,
+    private val postsUsecases: PostsUseCase,
     private val authUseCase: AuthUseCases
 ): ViewModel() {
     var postsResponse by mutableStateOf<Response<List<Post>>?>(null)
+    var deleteResponse by mutableStateOf<Response<Boolean>?>(null)
 
     val currentUser = authUseCase.getCurrentUser()
 
@@ -29,8 +31,14 @@ class MyPostsViewModel @Inject constructor(
 
     fun getPosts() = viewModelScope.launch {
         postsResponse = Loading
-        getPostsByIdUser.invoke(currentUser?.uid ?: "").collect { result ->
+        postsUsecases.getPostByUserId(currentUser?.uid ?: "").collect { result ->
             postsResponse = result
         }
+    }
+
+    fun deletePost(idPost: String) = viewModelScope.launch {
+        deleteResponse = Loading
+        val result = postsUsecases.deletePostUseCase.invoke(idPost)
+        deleteResponse = result
     }
 }

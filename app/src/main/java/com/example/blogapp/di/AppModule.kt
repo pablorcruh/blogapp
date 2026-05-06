@@ -14,6 +14,7 @@ import com.example.blogapp.domain.usecases.auth.LoginUseCase
 import com.example.blogapp.domain.usecases.auth.LogoutUseCase
 import com.example.blogapp.domain.usecases.auth.SignupUseCase
 import com.example.blogapp.domain.usecases.posts.CreatePostUseCase
+import com.example.blogapp.domain.usecases.posts.DeletePostUseCase
 import com.example.blogapp.domain.usecases.posts.GetPostsByUserIdUseCase
 import com.example.blogapp.domain.usecases.posts.GetPostsUseCase
 import com.example.blogapp.domain.usecases.posts.PostsUseCase
@@ -94,7 +95,8 @@ object AppModule {
     fun providePostUseCase(repository: PostRepository) = PostsUseCase(
         createPost = CreatePostUseCase(repository),
         getPosts = GetPostsUseCase(repository),
-        getPostByUserId = GetPostsByUserIdUseCase(repository)
+        getPostByUserId = GetPostsByUserIdUseCase(repository),
+        deletePostUseCase = DeletePostUseCase(repository)
     )
 
 }

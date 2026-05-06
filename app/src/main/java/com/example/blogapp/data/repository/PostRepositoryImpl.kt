@@ -65,6 +65,9 @@ class PostRepositoryImpl @Inject constructor(
         val snapshotListener = postRef.whereEqualTo("idUser", idUser).addSnapshotListener { snapshot, exception ->
             val postResponse = if(snapshot != null){
                 val posts = snapshot.toObjects(Post::class.java)
+                snapshot.documents.forEachIndexed { index, document ->
+                    posts[index].id = document.id
+                 }
                 Response.Success(posts)
             }else {
                 Response.Failure(exception)
@@ -89,6 +92,16 @@ class PostRepositoryImpl @Inject constructor(
             postRef.add(post).await()
             Response.Success(true)
         } catch (e: Exception) {
+            e.printStackTrace()
+            Response.Failure(e)
+        }
+    }
+
+    override suspend fun delete(idPost: String): Response<Boolean> {
+        return try{
+            postRef.document(idPost).delete().await()
+            Response.Success(true)
+        }catch(e: Exception){
             e.printStackTrace()
             Response.Failure(e)
         }
