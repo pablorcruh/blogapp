@@ -18,6 +18,7 @@ import com.example.blogapp.domain.usecases.posts.DeletePostUseCase
 import com.example.blogapp.domain.usecases.posts.GetPostsByUserIdUseCase
 import com.example.blogapp.domain.usecases.posts.GetPostsUseCase
 import com.example.blogapp.domain.usecases.posts.PostsUseCase
+import com.example.blogapp.domain.usecases.posts.UpdatePostUseCase
 import com.example.blogapp.domain.usecases.users.CreateUserUseCase
 import com.example.blogapp.domain.usecases.users.GetUserByIdUseCase
 import com.example.blogapp.domain.usecases.users.SaveImageUseCase
@@ -96,7 +97,8 @@ object AppModule {
         createPost = CreatePostUseCase(repository),
         getPosts = GetPostsUseCase(repository),
         getPostByUserId = GetPostsByUserIdUseCase(repository),
-        deletePostUseCase = DeletePostUseCase(repository)
+        deletePostUseCase = DeletePostUseCase(repository),
+        updatePostUseCase = UpdatePostUseCase(repository)
     )
 
 }

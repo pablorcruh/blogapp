@@ -11,6 +11,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.blogapp.presentation.components.DefaultButton
 import com.example.blogapp.presentation.components.DefaultTopBar
+import com.example.blogapp.presentation.navigation.DetailsScreen
+import com.example.blogapp.presentation.screens.detail_post.DetailPostScreen
 import com.example.blogapp.presentation.screens.update_post.components.UpdatePost
 import com.example.blogapp.presentation.screens.update_post.components.UpdatePostContent
 
@@ -34,6 +36,7 @@ fun UpdatePostScreen(navController: NavHostController, post: String,viewModel: U
                 text = "Actualizar",
                 onClick = {
                     viewModel.onUpdatePost()
+                    navController.popBackStack()
                 }
             )
         }

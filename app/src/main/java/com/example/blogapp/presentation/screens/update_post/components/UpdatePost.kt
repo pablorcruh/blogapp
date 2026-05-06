@@ -10,13 +10,13 @@ import com.example.blogapp.presentation.screens.update_post.UpdatePostViewModel
 
 @Composable
 fun UpdatePost(viewModel: UpdatePostViewModel = hiltViewModel()){
-    when(val response = viewModel.createPostResponse){
+    when(val response = viewModel.updatePostResponse){
         Response.Loading ->{
             ProgressBar()
         }
         is Response.Success -> {
             viewModel.clearForm()
-            Toast.makeText(LocalContext.current, "Publicacion creada correctamente", Toast.LENGTH_LONG).show()
+            Toast.makeText(LocalContext.current, "Publicacion Actualizada correctamente", Toast.LENGTH_LONG).show()
         }
         is Response.Failure -> {
             Toast.makeText(LocalContext.current, response.exception?.message ?: "Error desconocido", Toast.LENGTH_LONG).show()

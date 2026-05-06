@@ -12,7 +12,6 @@ import com.example.blogapp.domain.model.Post
 import com.example.blogapp.domain.model.Response
 import com.example.blogapp.domain.usecases.auth.AuthUseCases
 import com.example.blogapp.domain.usecases.posts.PostsUseCase
-import com.example.blogapp.presentation.screens.new_post.CategoryRadioButton
 import com.example.blogapp.presentation.utils.ComposeFileProvider
 import com.example.blogapp.presentation.utils.ResultingActivityHandler
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -35,7 +34,7 @@ class UpdatePostViewModel @Inject constructor(
     var state by mutableStateOf(UpdatePostState())
         private set
 
-    var createPostResponse by mutableStateOf<Response<Boolean>?>(null)
+    var updatePostResponse by mutableStateOf<Response<Boolean>?>(null)
 
     var file: File? = null
 
@@ -75,31 +74,34 @@ class UpdatePostViewModel @Inject constructor(
         CategoryRadioButton("NINTENDO", R.drawable.icon_nintendo)
     )
 
-    fun createPost(post: Post) = viewModelScope.launch {
-        createPostResponse = Response.Loading
-        val result = postUseCase.createPost(post, file!!)
-        createPostResponse = result
+    fun UpdatePost(post: Post) = viewModelScope.launch {
+        updatePostResponse = Response.Loading
+        val result = postUseCase.updatePostUseCase.invoke(post, file)
+        updatePostResponse = result
     }
 
     fun onUpdatePost(){
         val post = Post(
+            id = post.id,
             name = state.name,
             description = state.description,
+            image = post.image,
             category = state.category,
             idUser = user?.uid ?: ""
         )
-        createPost(post)
+        UpdatePost(post)
     }
 
 
     fun clearForm(){
-        state = state.copy(
+        /*state = state.copy(
             name = "",
             category = "",
             description = "",
             image = ""
-        )
-        createPostResponse = null
+        )*/
+
+        updatePostResponse = null
     }
 
     fun onNameInput(name: String){
