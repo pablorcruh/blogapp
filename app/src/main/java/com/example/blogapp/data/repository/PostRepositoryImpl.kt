@@ -17,7 +17,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
-import okhttp3.Dispatcher
 import java.io.File
 import javax.inject.Inject
 import javax.inject.Named
@@ -56,6 +55,21 @@ class PostRepositoryImpl @Inject constructor(
                 }
                 trySend(postResponse)
             }
+        }
+        awaitClose{
+            snapshotListener.remove()
+        }
+    }
+
+    override fun getPostsByUserId(idUser: String): Flow<Response<List<Post>>> = callbackFlow {
+        val snapshotListener = postRef.whereEqualTo("idUser", idUser).addSnapshotListener { snapshot, exception ->
+            val postResponse = if(snapshot != null){
+                val posts = snapshot.toObjects(Post::class.java)
+                Response.Success(posts)
+            }else {
+                Response.Failure(exception)
+            }
+            trySend(postResponse)
         }
         awaitClose{
             snapshotListener.remove()

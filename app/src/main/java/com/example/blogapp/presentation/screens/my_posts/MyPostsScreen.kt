@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.blogapp.presentation.navigation.DetailsScreen
+import com.example.blogapp.presentation.screens.my_posts.components.GetPostsByIdUser
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
@@ -20,7 +21,7 @@ fun MyPostsScreen(navController: NavHostController){
     Scaffold(
         topBar = {},
         content = {
-            Text(text = "MyPostsScreen")
+            GetPostsByIdUser(navController)
         },
         bottomBar = {},
         floatingActionButton = {
